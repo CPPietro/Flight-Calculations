@@ -1,19 +1,24 @@
 # Calculates Lift via the lift equation
 # rho = air pressure (Generaly QNH(hPa), but in this equation it is kg/m3)
 
-from statepad import state_1
+# Imports state
+from state import state_1
 
+# Class for using the lift equation
 class lift_equation():
 
+    # Function for converting air pressure and surface area from imperial to metric
     def convert_imperial_to_metric(self, imp_rho, imp_surface_area):
         rho = imp_rho * 16.018
         surface_area = imp_surface_area / 10.764
         return rho, surface_area
 
-
+    # Function that calculates lift from the parameters
     def calculate_lift(self, rho, velocity, surface_area, CL):
+        # Full equation (metric)
         # Lift = (rho/2) x velocity2 x surface area x co-efficient of lift
 
+        # Checks if params are givin in imperial and if they are converts them to metric
         if state_1.units == 1:
             rho, surface_area = self.convert_imperial_to_metric(rho, surface_area)
 
@@ -38,6 +43,7 @@ class lift_equation():
         else:
             try:
                 return float(input_str)
+            # Catches the error for if the user didn't input a num
             except ValueError:
                 print("Must be a number! Reverting to standard")
                 return standard
@@ -63,6 +69,7 @@ class lift_equation():
         velocity = velocity/1.944
 
         # Gets surface area of wing - standard = 122.6m2 for a320
+        # Checks if wing surface area is already in the state
         if state_1.wing_surface_area == 0:
             print("Enter wing surface area: (m2 or ft2)")
             surface_area = self.check_get_standard(input(), 122.6, 1319.6554)
@@ -87,12 +94,14 @@ class lift_equation():
 
         print("Lift=")
     
+        # Converts the output from metric to imperial if neccesary
         if state_1.units == 0:
             print(f"{lift}N")
         else:
             imp_lift = lift/4.448
             print(f"{imp_lift}lb-force")
 
+        # Makes sure window doesn't close instantly
         input("Press enter to leave")
         return
 
