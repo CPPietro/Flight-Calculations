@@ -1,6 +1,8 @@
 # Calculates Lift via the lift equation
 # rho = air pressure (Generaly QNH(hPa), but in this equation it is kg/m3)
 
+from statepad import state_1
+
 class lift_equation():
 
     def calculate_lift(self, rho, velocity, surface_area, CL):
@@ -39,7 +41,10 @@ class lift_equation():
         velocity = self.check_get_standard(input("Enter speed (m/s): "), 230)
 
         # Gets surface area of wing - standard = 122.6m2 for a320
-        surface_area = self.check_get_standard(input("Enter surface area of wing(m2): "), 122.6)
+        if state_1.wing_surface_area == 0:
+            surface_area = self.check_get_standard(input("Enter surface area of wing(m2): "), 122.6)
+        else:
+            surface_area = state_1.wing_surface_area
 
         # Get co-efficent of lift - standard = 0.595
         cl = self.check_get_standard(input("Enter co-effiecnt of lift: "), 0.595)
@@ -60,7 +65,7 @@ class lift_equation():
         print(f"{lift}N")
         input("Press enter to leave")
         return
-
+    
 if __name__ == "__main__":
     app = lift_equation()
     app.main()
